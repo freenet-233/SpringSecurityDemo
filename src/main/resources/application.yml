@@ -1,0 +1,61 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: SpringSecurityDemo
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://127.0.0.1:3306/wang?serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf8&autoReconnect=true&allowMultiQueries=true
+    username: root
+    password: root123
+    druid:
+      initialSize: 5
+      minIdle: 5
+      maxActive: 20
+      maxWait: 60000
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      poolPreparedStatements: true
+      filters: stat,wall,log4j,config
+      maxPoolPreparedStatementPerConnectionSize: 20
+      useGlobalDataSourceStat: true
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+
+  data:
+    redis:
+      host: 127.0.0.1
+      port: 6379
+      database: 0
+      password: 123456
+      lettuce:
+        pool:
+          max-active: 8
+          max-wait: -1
+          max-idle: 8
+          min-idle: 0
+      timeout: 10000
+
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+mybatis-plus:
+  global-config:
+    db-config:
+      logic-delete-field: deleted
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+  configuration:
+    # \u5C06 Java \u5B9E\u4F53\u7C7B\u5C5E\u6027\u7684\u9A7C\u5CF0\u547D\u540D\u89C4\u5219\u8F6C\u6362\u4E3A\u6570\u636E\u5E93\u5B57\u6BB5\u7684\u4E0B\u5212\u7EBF\u547D\u540D\u89C4\u5219
+    map-underscore-to-camel-case: true
+    # \u67E5\u8BE2\u7ED3\u679C\u4E2D\u5305\u542B\u7A7A\u503C\u7684\u5217\uFF0C\u5728\u6620\u5C04\u7684\u65F6\u5019\uFF0C\u4E0D\u4F1A\u6620\u5C04\u8FD9\u4E2A\u5B57\u6BB5
+    call-setters-on-nulls: true
+    # \u5F00\u542F sql \u65E5\u5FD7
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath*:/mapper/**/*.xml
