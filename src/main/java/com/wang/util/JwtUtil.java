@@ -1,13 +1,17 @@
 package com.wang.util;
 
+import cn.hutool.core.bean.BeanUtil;
+import com.alibaba.fastjson2.JSON;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.cglib.beans.BeanMap;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author wangguangpeng
@@ -20,10 +24,8 @@ public class JwtUtil {
     private static final SecretKey secretKey = Keys.hmacShaKeyFor("S/4AN9IsSRUC~{0c4]y#$F2XbV8^`#a14vawn<~Kr@(D%3TF-p1s/h{Y9k7y((rR".getBytes());
     private static final long expiration = 1000L * 60 * 60 * 24 * 30;
 
-    public String generateToken(String name, String password) {
-        HashMap<String, Object> claims = new HashMap<>();
-        claims.put("name", name);
-        claims.put("password", password);
+    public String generateToken(Object claim) {
+        Map<String, Object> claims = BeanUtil.beanToMap(claim);
 
         return Jwts.builder()
                 .subject("JwtToken")
@@ -63,11 +65,4 @@ public class JwtUtil {
         return claims.get("exp", Date.class).after(new Date());
     }
 
-    public static void main(String[] args) {
-        JwtUtil jwtUtil = new JwtUtil();
-        String token = jwtUtil.generateToken("wangfc", "12345687");
-        System.out.println(token);
-        Claims claims = jwtUtil.parseToken(token);
-        System.out.println(claims);
-    }
 }
