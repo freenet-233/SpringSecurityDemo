@@ -12,9 +12,9 @@ public enum ResultCode {
     SUCCESS(200, "成功"),
     ERROR(400, "失败");
 
-    private Integer code;
+    private final Integer code;
 
-    private String message;
+    private final String message;
 
     ResultCode(Integer code, String message) {
         this.code = code;
