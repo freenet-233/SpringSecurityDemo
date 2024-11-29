@@ -26,8 +26,6 @@ public class UserDetailServiceImpl implements UserDetailsService {
         if (Objects.isNull(user)) {
             throw new RuntimeException("用户不存在");
         }
-
-
         return new LoginUser(user);
     }
 }
