@@ -19,11 +19,12 @@ public class UserController {
 
     @PostMapping("/login")
     public R login (@RequestBody SysUser sysUser) {
-        String jwt = userService.login(sysUser);
-        if (StringUtils.hasLength(jwt)) {
-            return R.ok().message("登陆成功").data("token", jwt);
-        }
-        return R.error().message("登录失败");
+        return userService.login(sysUser);
+    }
+
+    @PostMapping("/logout")
+    public R logout (@RequestBody SysUser sysUser) {
+        return userService.logout();
     }
 
 }

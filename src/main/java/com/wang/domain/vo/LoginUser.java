@@ -13,9 +13,15 @@ import java.util.List;
 @NoArgsConstructor
 public class LoginUser implements UserDetails {
     private SysUser sysUser;
+    private Long id;
+
 
     public LoginUser(SysUser sysUser) {
         this.sysUser = sysUser;
+    }
+
+    public Long getId() {
+        return sysUser.getId();
     }
 
     @Override
