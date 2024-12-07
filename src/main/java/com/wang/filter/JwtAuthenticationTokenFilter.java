@@ -4,6 +4,8 @@ import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import com.wang.common.RedisKeyEnum;
 import com.wang.domain.vo.LoginUser;
+import com.wang.exception.CustomerAuthenticationException;
+import com.wang.handler.LoginFailHandler;
 import com.wang.util.JwtUtil;
 import com.wang.util.RedisCache;
 import io.jsonwebtoken.Claims;
@@ -14,6 +16,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -34,29 +37,43 @@ public class JwtAuthenticationTokenFilter extends OncePerRequestFilter {
     private JwtUtil jwtUtil;
     @Resource
     private RedisCache redisCache;
+    @Resource
+    private LoginFailHandler loginFailHandler;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        String url = request.getRequestURI();
-        if (url.contains("/user/login")) {
-            filterChain.doFilter(request, response);
-            return;
+        try {
+            String url = request.getRequestURI();
+            if (!url.contains("/user/login")) {
+                validateToken(request);
+            }
+        } catch (AuthenticationException e) {
+            loginFailHandler.onAuthenticationFailure(request, response, e);
         }
+        filterChain.doFilter(request, response);
+    }
+
+    private void validateToken(HttpServletRequest request) {
         String token = request.getHeader("Authorization");
         if (!StringUtils.hasText(token)) {
-            throw new RuntimeException("token is empty");
+            token = request.getParameter("Authorization");
+        }
+        if (!StringUtils.hasText(token)) {
+            throw new CustomerAuthenticationException("Token is empty!");
         }
         String subject;
         try {
             Claims claims = jwtUtil.parseToken(token);
             subject = claims.getSubject();
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new CustomerAuthenticationException("Token validate failed!");
         }
         JSONObject userJson = redisCache.getCacheObject(RedisKeyEnum.LOGIN.getKey() + subject);
+        if (userJson == null) {
+            throw new CustomerAuthenticationException("Token expired!");
+        }
         LoginUser loginUser = JSON.parseObject(userJson.toString(), LoginUser.class);
-        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser, null, null);
+        UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(loginUser, null, loginUser.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-        filterChain.doFilter(request, response);
     }
 }

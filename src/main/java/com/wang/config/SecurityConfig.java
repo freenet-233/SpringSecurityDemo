@@ -1,6 +1,9 @@
 package com.wang.config;
 
+import com.wang.exception.AnonymousAuthenticationException;
 import com.wang.filter.JwtAuthenticationTokenFilter;
+import com.wang.handler.CustomerAccessDeniedHandler;
+import com.wang.handler.LoginFailHandler;
 import jakarta.annotation.Resource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -24,6 +27,12 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
     @Resource
     private JwtAuthenticationTokenFilter jwtAuthenticationTokenFilter;
+    @Resource
+    private CustomerAccessDeniedHandler customerAccessDeniedHandler;
+    @Resource
+    private AnonymousAuthenticationException anonymousAuthenticationException;
+    @Resource
+    private LoginFailHandler loginFailHandler;
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -38,6 +47,7 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
+                .formLogin(f -> f.failureHandler(loginFailHandler))
                 .sessionManagement(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         auth -> auth.requestMatchers("/user/login")
@@ -45,7 +55,11 @@ public class SecurityConfig {
                         .anyRequest()
                         .authenticated())
                 .addFilterBefore(jwtAuthenticationTokenFilter, UsernamePasswordAuthenticationFilter.class)
-                .cors(AbstractHttpConfigurer::disable);
+                .cors(AbstractHttpConfigurer::disable)
+                .exceptionHandling(ex -> {
+                    ex.accessDeniedHandler(customerAccessDeniedHandler);
+                    ex.authenticationEntryPoint(anonymousAuthenticationException);
+                });
         return http.build();
     }
 

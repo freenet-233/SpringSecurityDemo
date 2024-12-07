@@ -16,3 +16,50 @@ CREATE TABLE `sys_user` (
                             `deleted` INT(11) DEFAULT '0' COMMENT '删除标志（0代表未删除，1代表已删除）',
                             PRIMARY KEY (`id`)
 ) ENGINE=INNODB DEFAULT CHARSET=utf8mb4 COMMENT='用户表';
+
+
+CREATE TABLE `sys_menu` (
+                            `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+                            `menu_name` VARCHAR(64) NOT NULL DEFAULT 'NULL' COMMENT '菜单名',
+                            `path` VARCHAR(200) DEFAULT NULL COMMENT '路由地址',
+                            `component` VARCHAR(255) DEFAULT NULL COMMENT '组件路径',
+                            `visible` CHAR(1) DEFAULT '0' COMMENT '菜单状态 (0显示 1隐藏)',
+                            `status` CHAR(1) DEFAULT '0' COMMENT '菜单状态 (0正常 1停用)',
+                            `perms` VARCHAR(100) DEFAULT NULL COMMENT '权限标识',
+                            `icon` VARCHAR(100) DEFAULT '#' COMMENT '菜单图标',
+                            `create_by` BIGINT(20) DEFAULT NULL,
+                            `create_time` DATETIME DEFAULT NULL,
+                            `update_by` BIGINT(20) DEFAULT NULL,
+                            `update_time` DATETIME DEFAULT NULL,
+                            `del_flag` INT(11) DEFAULT '0' COMMENT '是否删除 (0未删除 1已删除)',
+                            `remark` VARCHAR(500) DEFAULT NULL COMMENT '备注',
+                            PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8mb4 COMMENT='菜单表';
+
+
+CREATE TABLE `sys_role` (
+                            `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+                            `name` VARCHAR(128) DEFAULT NULL,
+                            `role_key` VARCHAR(100) DEFAULT NULL COMMENT '角色权限字符串',
+                            `status` CHAR(1) DEFAULT '0' COMMENT '角色状态 (0正常 1停用)',
+                            `del_flag` INT(1) DEFAULT '0' COMMENT 'del_flag',
+                            `create_by` BIGINT(200) DEFAULT NULL,
+                            `create_time` DATETIME DEFAULT NULL,
+                            `update_by` BIGINT(200) DEFAULT NULL,
+                            `update_time` DATETIME DEFAULT NULL,
+                            `remark` VARCHAR(500) DEFAULT NULL COMMENT '备注',
+                            PRIMARY KEY (`id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8mb4 COMMENT='角色表';
+
+
+CREATE TABLE `sys_role_menu` (
+                                 `role_id` BIGINT(200) NOT NULL AUTO_INCREMENT COMMENT '角色ID',
+                                 `menu_id` BIGINT(200) NOT NULL DEFAULT '0' COMMENT '菜单id',
+                                 PRIMARY KEY (`role_id`, `menu_id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8mb4 COMMENT='角色菜单关系表';
+
+CREATE TABLE `sys_user_role` (
+                                 `user_id` BIGINT(200) NOT NULL AUTO_INCREMENT COMMENT '用户id',
+                                 `role_id` BIGINT(200) NOT NULL DEFAULT '0' COMMENT '角色id',
+                                 PRIMARY KEY (`user_id`, `role_id`)
+) ENGINE=INNODB DEFAULT CHARSET=utf8mb4 COMMENT='用户角色关系表';
