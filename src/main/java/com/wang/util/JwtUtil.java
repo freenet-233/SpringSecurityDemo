@@ -1,6 +1,5 @@
 package com.wang.util;
 
-import cn.hutool.core.bean.BeanUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;

@@ -1,6 +1,5 @@
 package com.wang.service.impl;
 
-import cn.hutool.core.bean.BeanUtil;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.wang.common.R;
 import com.wang.common.RedisKeyEnum;
@@ -45,7 +44,6 @@ public class UserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impleme
             throw new RuntimeException("登陆失败");
         }
         LoginUser loginUser = (LoginUser) authenticate.getPrincipal();
-//        Map<String, Object> claims = BeanUtil.beanToMap(loginUser);
         String userId = loginUser.getId().toString();
         String jwt = jwtUtil.generateToken(userId);
 
