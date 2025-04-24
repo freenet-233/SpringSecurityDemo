@@ -1,0 +1,24 @@
+###
+POST http://127.0.0.1:9088/user/login
+Content-Type: application/json
+
+{
+  "userName": "zhangsan",
+  "password": "123456"
+}
+
+###
+GET http://127.0.0.1:9088/goods/select
+Authorization: Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaXNzIjoiRGFya2lyaXMiLCJleHAiOjE3Mzc3OTA5ODJ9.CkdMTiAprkYDt6cKRsATo7tePM6iYNQModP41FdTkFCVzcmfvWTxrBg5aSmvunVwFV-d4csmgUv3oZQDXFr00g
+
+
+
+###
+GET http://127.0.0.1:9088/goods/getGoods
+Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaXNzIjoiRGFya2lyaXMiLCJleHAiOjE3Mzc3OTA5ODJ9.CkdMTiAprkYDt6cKRsATo7tePM6iYNQModP41FdTkFCVzcmfvWTxrBg5aSmvunVwFV-d4csmgUv3oZQDXFr00g
+
+###
+POST http://127.0.0.1:9088/goods/addGoods
+Content-Type: application/json
+Authorization: eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiIyIiwiaXNzIjoiRGFya2lyaXMiLCJleHAiOjE3MzYxNzM3NDd9.AdRIb5kdp5Derh6sEnNrD0i3Bu0bnmBkhDzoZG8Yero_lV1nhmVLYkybuenjKlH8ppEaU1FiN9xkrcgxSDJYbg
+

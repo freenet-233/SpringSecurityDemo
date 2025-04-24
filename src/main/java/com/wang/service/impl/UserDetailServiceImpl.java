@@ -6,17 +6,20 @@ import com.wang.domain.vo.LoginUser;
 import com.wang.mapper.MenuMapper;
 import com.wang.mapper.SysUserMapper;
 import jakarta.annotation.Resource;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Objects;
 
 @Service
+@Slf4j
 public class UserDetailServiceImpl implements UserDetailsService {
     @Resource
     private SysUserMapper sysUserMapper;
@@ -37,6 +40,9 @@ public class UserDetailServiceImpl implements UserDetailsService {
         }
 
         List<String> permissions = menuMapper.selectPermsByUserId(user.getId());
+        if (CollectionUtils.isEmpty(permissions)) {
+            log.warn("该用户 {} 无任何接口访问权限", username);
+        }
 
         return new LoginUser(user, permissions);
     }
