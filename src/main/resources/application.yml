@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 9088
 
 spring:
   application:
@@ -33,10 +33,22 @@ mybatis-plus:
       logic-delete-value: 1
       logic-not-delete-value: 0
   configuration:
-    # \u5C06 Java \u5B9E\u4F53\u7C7B\u5C5E\u6027\u7684\u9A7C\u5CF0\u547D\u540D\u89C4\u5219\u8F6C\u6362\u4E3A\u6570\u636E\u5E93\u5B57\u6BB5\u7684\u4E0B\u5212\u7EBF\u547D\u540D\u89C4\u5219
     map-underscore-to-camel-case: true
-    # \u67E5\u8BE2\u7ED3\u679C\u4E2D\u5305\u542B\u7A7A\u503C\u7684\u5217\uFF0C\u5728\u6620\u5C04\u7684\u65F6\u5019\uFF0C\u4E0D\u4F1A\u6620\u5C04\u8FD9\u4E2A\u5B57\u6BB5
     call-setters-on-nulls: true
-    # \u5F00\u542F sql \u65E5\u5FD7
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath*:/mapper/**/*.xml
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: '*'
+  endpoint:
+    prometheus:
+      enabled: true
+    health:
+      show-details: always
+  prometheus:
+    metrics:
+      export:
+        enabled: true
