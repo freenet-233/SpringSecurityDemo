@@ -1,5 +1,6 @@
 package com.wang.domain;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
@@ -8,11 +9,11 @@ import lombok.Data;
 
 /**
  * 理赔案件表
- * @TableName t_claim_case_info
+ * @TableName t_individual_authorization_management
  */
+@TableName(value ="t_individual_authorization_management")
 @Data
-@TableName(value = "t_claim_case_info")
-public class ClaimCaseInfo implements Serializable {
+public class IndividualAuthorizationManagement implements Serializable {
     /**
      * 主键ID
      */
@@ -20,14 +21,9 @@ public class ClaimCaseInfo implements Serializable {
     private Integer id;
 
     /**
-     * 交易编码
+     * 授权码
      */
-    private String transactionNo;
-
-    /**
-     * 手机号
-     */
-    private String mobileNo;
+    private String authCode;
 
     /**
      * 插入时间
@@ -49,5 +45,6 @@ public class ClaimCaseInfo implements Serializable {
      */
     private Integer updateId;
 
+    @TableField(exist = false)
     private static final long serialVersionUID = 1L;
 }
