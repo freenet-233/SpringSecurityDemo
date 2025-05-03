@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
  * @date 2024/12/25 17:19
  **/
 @Configuration
-public class PrometheusConfig {
+public class WangPrometheusConfig {
 
     @Bean
     MeterRegistryCustomizer<MeterRegistry> configurer(
