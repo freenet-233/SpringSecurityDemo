@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="30 seconds">
+    <!-- 定义变量 -->
+    <property name="LOG_HOME" value="./logs" />
+    <property name="APP_NAME" value="my-application" />
+    <property name="COMMON_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] [%X{traceId}] %-5level %logger{36} - %msg%n" />
+
+    <!-- 控制台输出 -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <!-- 控制台只输出INFO及以上级别 -->
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>INFO</level>
+        </filter>
+    </appender>
+
+    <!-- 滚动文件输出 -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_HOME}/${APP_NAME}.log</file>
+        <encoder>
+            <pattern>${LOG_PATTERN}</pattern>
+            <charset>UTF-8</charset>
+        </encoder>
+        <!-- 滚动策略 -->
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <!-- 按日期和大小滚动 -->
+            <fileNamePattern>${LOG_HOME}/${APP_NAME}-%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <!-- 单个文件最大100MB -->
+            <maxFileSize>100MB</maxFileSize>
+            <!-- 保留30天日志 -->
+            <maxHistory>30</maxHistory>
+            <!-- 总大小不超过5GB -->
+            <totalSizeCap>5GB</totalSizeCap>
+        </rollingPolicy>
+    </appender>
+
+    <!-- 异步日志 -->
+    <appender name="ASYNC" class="ch.qos.logback.classic.AsyncAppender">
+        <!-- 不丢失日志的阈值，默认256 -->
+        <queueSize>512</queueSize>
+        <!-- 添加附加的appender -->
+        <appender-ref ref="FILE" />
+    </appender>
+
+    <!-- 日志级别设置 -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE" />
+        <appender-ref ref="ASYNC" />
+    </root>
+
+    <!-- 特定包/类日志级别 -->
+    <logger name="com.example.demo.dao" level="DEBUG" />
+    <logger name="org.springframework" level="WARN" />
+
+    <!-- 开发环境特定配置 -->
+    <springProfile name="dev">
+        <root level="DEBUG">
+            <appender-ref ref="CONSOLE" />
+        </root>
+    </springProfile>
+
+    <!-- 生产环境 -->
+    <springProfile name="prod">
+        <root level="INFO">
+            <appender-ref ref="FILE" />
+            <appender-ref ref="SENTRY" />
+        </root>
+    </springProfile>
+
+    <!-- Sentry Appender -->
+    <appender name="SENTRY" class="io.sentry.logback.SentryAppender">
+        <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>ERROR</level>
+        </filter>
+    </appender>
+
+
+</configuration>

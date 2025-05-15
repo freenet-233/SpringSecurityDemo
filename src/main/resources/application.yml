@@ -3,10 +3,22 @@ server:
 
 spring:
   application:
-    name: SpringSecurityDemo
+    name: SpringSecurity
   datasource:
-    driver-class-name: org.apache.shardingsphere.driver.ShardingSphereDriver
-    url: jdbc:shardingsphere:classpath:sharding.yaml
+      url: jdbc:postgresql://localhost:3307/aya_db
+      username: sharding
+      password: sharding
+      driver-class-name: org.postgresql.Driver
+      type: com.zaxxer.hikari.HikariDataSource
+      hikari:
+        minimum-idle: 5
+        maximum-pool-size: 15
+        auto-commit: true
+        idle-timeout: 30000
+        pool-name: HikariCP
+        max-lifetime: 1800000
+        connection-timeout: 30000
+        connection-test-query: SELECT 1
 
   data:
     redis:

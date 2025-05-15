@@ -27,6 +27,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-logging</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -35,28 +41,9 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.shardingsphere</groupId>
-            <artifactId>shardingsphere-jdbc</artifactId>
-            <version>${shardingsphere.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.apache.shardingsphere</groupId>
-                    <artifactId>shardingsphere-test-util</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>org.yaml</groupId>
-            <artifactId>snakeyaml</artifactId>
-            <version>${snakeyaml.version}</version>
-        </dependency>
-
-
-        <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <!--<optional>true</optional>-->
+            <optional>true</optional>
         </dependency>
 
         <dependency>
@@ -163,5 +150,6 @@
             </plugin>
         </plugins>
     </build>
+
 
 </project>
