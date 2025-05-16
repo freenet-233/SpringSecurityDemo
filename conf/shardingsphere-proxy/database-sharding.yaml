@@ -122,13 +122,13 @@ rules:
         column: id
         keyGeneratorName: snowflake
 
-    defaultShardingColumn: transaction_no
-    bindingTables:
-      - t_claim_case_info, t_individual_authorization_management
-    defaultDatabaseStrategy:
-      standard:
-        shardingColumn: transaction_no
-        shardingAlgorithmName: database_inline
+  defaultShardingColumn: transaction_no
+  bindingTables:
+    - t_claim_case_info, t_individual_authorization_management
+  defaultDatabaseStrategy:
+    standard:
+      shardingColumn: transaction_no
+      shardingAlgorithmName: database_inline
   defaultTableStrategy:
     none:
   shardingAlgorithms:
