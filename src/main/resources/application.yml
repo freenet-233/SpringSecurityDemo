@@ -6,7 +6,7 @@ spring:
     name: SpringSecurityDemo
   datasource:
     driver-class-name: org.apache.shardingsphere.driver.ShardingSphereDriver
-    url: jdbc:shardingsphere:classpath:sharding.yaml
+    url: jdbc:shardingsphere:classpath:sharding-standalone.yaml
 
   data:
     redis:
